@@ -1,0 +1,31 @@
+server:
+  port: 9999
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_blog?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: fuckallhacker
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    timeout: 5500
+    database: 0
+  #  mvc:
+  #  static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/resources/static/,classpath:/public/,file:${web.upload-path}
+
+mybatis:
+  # 对应mapper映射xml文件的所在路径
+  mapper-locations: classpath*:mapper/*.xml
+  # 对应实体类的路径
+  type-aliases-package: club.dulaoshi.blog.entity
+  # 打印sql
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
