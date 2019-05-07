@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="content" column="content"/>
 		<result property="keyWord" column="keyWord"/>
 		
-		<association property="blogType" column="typeId" select="club.dulaoshi.blog.dao.BlogDao.findById"></association>
+		<association property="blogType" column="typeId" select="club.dulaoshi.blog.dao.BlogTypeDao.findById"></association>
 	</resultMap>
 	
 	

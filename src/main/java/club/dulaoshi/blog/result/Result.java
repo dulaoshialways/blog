@@ -14,12 +14,12 @@ public class Result<T> implements Serializable {
     /**
      * 错误码,默认值0位成功
      */
-    protected int success = 0;
+    protected int code = 0;
 
     /**
      * 错误消息
      */
-    protected String errorMsg;
+    protected String msg;
 
     /**
      * 返回的实体类
@@ -30,9 +30,9 @@ public class Result<T> implements Serializable {
         super();
     }
 
-    public Result(int errorCode, String errorMsg, T data) {
-        this.success = errorCode;
-        this.errorMsg = errorMsg;
+    public Result(int code, String errorMsg, T data) {
+        this.code = code;
+        this.msg = errorMsg;
         this.data = data;
     }
 
@@ -43,8 +43,8 @@ public class Result<T> implements Serializable {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("Result { \n");
-        sb.append("        errorCode    = ").append(success).append(",\n");
-        sb.append("        errorMsg = ").append(errorMsg);
+        sb.append("        errorCode    = ").append(code).append(",\n");
+        sb.append("        errorMsg = ").append(msg);
         sb.append("\n}");
         return sb.toString();
     }
@@ -59,17 +59,17 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static <T> Result<T> fail(int errorCode) {
+    public static <T> Result<T> fail(int code) {
         Result<T> result = new Result<>();
-        result.success = errorCode;
-        result.errorMsg = ResultCode.getMessage(errorCode);
+        result.code = code;
+        result.msg = ResultCode.getMessage(code);
         return result;
     }
 
-    public static <T> Result<T> fail(int errorCode, String errorMsg) {
+    public static <T> Result<T> fail(int code, String errorMsg) {
         Result<T> result = new Result<>();
-        result.success = errorCode;
-        result.errorMsg = errorMsg;
+        result.code = code;
+        result.msg = errorMsg;
         return result;
     }
 }

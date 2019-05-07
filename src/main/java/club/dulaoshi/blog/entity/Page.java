@@ -12,6 +12,11 @@ import java.util.List;
  */
 @Data
 public class Page<T> {
+
+    public Page(){
+        this.page = 0;
+        this.pageSize = 10;
+    }
     /**
      * 当前页
      */
