@@ -83,11 +83,17 @@ public class BlogController {
      * @param id
      * @return
      */
-    @GetMapping(value="commentList")
+    @GetMapping(value="/comment/list")
     @SysLog("获取博客评论接口")
-    public Object getCommentList(@RequestParam("page") String currentPage,@RequestParam("id") Integer id){
-        if(StringUtil.isEmpty(currentPage)){
-            currentPage = "1";
+    public Object getCommentList(@RequestParam("page") Integer currentPage,
+                                 @RequestParam("pageSize") Integer pageSize,
+                                 @RequestParam("id") Integer id){
+        if(null == currentPage){
+            currentPage = 1;
+        }
+
+        if(null == pageSize){
+            pageSize = 10;
         }
 
         Map<String, Object> map = new HashMap<>(16);
@@ -100,15 +106,15 @@ public class BlogController {
             list.get(i-1).setCommentDateStr(DateUtil.formatDate(list.get(i-1).getCommentDate(),"yyyy-MM-dd HH:mm:ss"));
             list.get(i-1).setFloor(list.size()-i+1);
         }
-        int toIndex = list.size() >= Integer.parseInt(currentPage)*10?Integer.parseInt(currentPage)*10:list.size();
+        int toIndex = list.size() >= currentPage*pageSize?currentPage*pageSize:list.size();
 
         Page page = new Page();
-        page.setList(list.subList((Integer.parseInt(currentPage)-1)*10, toIndex));
-        page.setPage(Integer.parseInt(currentPage));
+        page.setList(list.subList((currentPage-1)*pageSize, toIndex));
+        page.setPage(currentPage);
         page.setTotal(total);
         page.setStart(1);
-        page.setPageSize(10);
-        long totalPage = total%10==0?total/10:total/10+1;
+        page.setPageSize(pageSize);
+        long totalPage = total%pageSize==0?total/pageSize:total/pageSize+1;
         page.setPageTotal(totalPage);
         return Result.success(page);
     }

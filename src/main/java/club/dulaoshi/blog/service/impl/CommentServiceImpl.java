@@ -3,6 +3,7 @@ package club.dulaoshi.blog.service.impl;
 import club.dulaoshi.blog.dao.CommentDao;
 import club.dulaoshi.blog.entity.Comment;
 import club.dulaoshi.blog.service.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

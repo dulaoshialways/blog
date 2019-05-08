@@ -15,6 +15,11 @@ public class IndexDto {
     private String page;
 
     /**
+     * 分页条数
+     */
+    private String pageSize;
+
+    /**
      * 分类id
      */
     private String typeId;

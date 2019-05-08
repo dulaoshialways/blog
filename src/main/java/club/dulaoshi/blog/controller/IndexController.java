@@ -12,10 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -39,23 +36,33 @@ public class IndexController {
 
     /**
      * 获取博客列表
-     * @param indexDto
+     * @param currentPage
+     * @param pageSize
+     * @param typeId
+     * @param releaseDateStr
      * @param request
      * @return
      */
-    @PostMapping(value="/blog/list")
+    @GetMapping(value="/blog/list")
     @SysLog("获取博客列表")
-    public Object blogList(@RequestBody IndexDto indexDto, HttpServletRequest request){
+    public Object blogList(@RequestParam("page") Integer currentPage,
+                           @RequestParam("pageSize") Integer pageSize,
+                           @RequestParam("typeId") Integer typeId,
+                           @RequestParam("releaseDateStr") String releaseDateStr,
+                           HttpServletRequest request){
         String path = "http://" + request.getServerName();
-        if(StringUtil.isEmpty(indexDto.getPage())){
-            indexDto.setPage("1");
-        }
         Page<Blog> page = new Page<>();
+        if(currentPage == null){
+            currentPage = 1;
+        }
+        if(pageSize != null){
+            page.setPageSize(pageSize);
+        }
         Map<String, Object> map = new HashMap<>(16);
-        map.put("start", (Integer.parseInt(indexDto.getPage())-1)*page.getPageSize());
+        map.put("start", (currentPage-1)*page.getPageSize());
         map.put("size", page.getPageSize());
-        map.put("releaseDateStr", indexDto.getReleaseDateStr());
-        map.put("typeId", indexDto.getTypeId());
+        map.put("releaseDateStr", releaseDateStr);
+        map.put("typeId", typeId);
 
         List<Blog> blogList = blogService.list(map);
 
@@ -78,9 +85,9 @@ public class IndexController {
         }
 
         page.setList(blogList);
-        page.setPage(Integer.parseInt(indexDto.getPage()));
+        page.setPage(currentPage);
         long total = blogService.getTotal(map);
-        long totalPage = total%10==0?total/10:total/10+1;
+        long totalPage = total%pageSize==0?total/pageSize:total/pageSize+1;
         page.setPageTotal(totalPage);
         page.setTotal(total);
         return Result.success(page);

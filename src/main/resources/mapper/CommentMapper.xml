@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<select id="list" parameterType="Map" resultMap="CommentResult">
-		select * from t_comment
+		select userIp,content,commentDate from t_comment
 		<where>
 			<if test="blogId != null">
 				and blogId=#{blogId}
