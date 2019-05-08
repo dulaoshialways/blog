@@ -43,9 +43,9 @@ public class IndexController {
      * @param request
      * @return
      */
-    @PostMapping(value="/index")
+    @PostMapping(value="/blog/list")
     @SysLog("获取博客列表")
-    public Object index(@RequestBody IndexDto indexDto, HttpServletRequest request){
+    public Object blogList(@RequestBody IndexDto indexDto, HttpServletRequest request){
         String path = "http://" + request.getServerName();
         if(StringUtil.isEmpty(indexDto.getPage())){
             indexDto.setPage("1");

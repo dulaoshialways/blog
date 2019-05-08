@@ -37,6 +37,11 @@ public class Comment {
     private Date commentDate;
 
     /**
+     * 评论日期字符串
+     */
+    private String commentDateStr;
+
+    /**
      * 审核状态 0待审核 1 审核通过 2 审核 未通过
      */
     private Integer state;

@@ -4,15 +4,12 @@ import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.entity.Blog;
 import club.dulaoshi.blog.entity.Comment;
 import club.dulaoshi.blog.entity.Page;
-import club.dulaoshi.blog.entity.PageBean;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.service.BlogService;
 import club.dulaoshi.blog.service.CommentService;
+import club.dulaoshi.blog.utils.DateUtil;
 import club.dulaoshi.blog.utils.StringUtil;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,9 +37,9 @@ public class BlogController {
      * @param id
      * @return
      */
-    @PostMapping(value="/articles/{id}")
+    @GetMapping(value="/articles")
     @SysLog("获取博客详情")
-    public Object details(@PathVariable("id") Integer id){
+    public Object details(@RequestParam("id") Integer id){
         Map<String,Object> result = new HashMap<>(16);
         Blog blog = blogService.findById(id);
         String keyWords = blog.getKeyWord();
@@ -82,35 +79,38 @@ public class BlogController {
 
     /**
      * 获取博客评论接口
-     * @param page
+     * @param currentPage
      * @param id
      * @return
      */
-    @PostMapping(value="getCommentList")
+    @GetMapping(value="commentList")
     @SysLog("获取博客评论接口")
-    public Object getCommentList(String page,Integer id){
-        if(StringUtil.isEmpty(page)){
-            page = "1";
+    public Object getCommentList(@RequestParam("page") String currentPage,@RequestParam("id") Integer id){
+        if(StringUtil.isEmpty(currentPage)){
+            currentPage = "1";
         }
 
         Map<String, Object> map = new HashMap<>(16);
         map.put("blogId", id);
         map.put("state", 1);
         List<Comment> list = commentService.list(map);
-        String total = commentService.getTotal(map).toString();
+        Long total = commentService.getTotal(map);
 
         for(int i= 1;i<=list.size();i++){
+            list.get(i-1).setCommentDateStr(DateUtil.formatDate(list.get(i-1).getCommentDate(),"yyyy-MM-dd HH:mm:ss"));
             list.get(i-1).setFloor(list.size()-i+1);
         }
-        int toIndex = list.size() >= Integer.parseInt(page)*10?Integer.parseInt(page)*10:list.size();
+        int toIndex = list.size() >= Integer.parseInt(currentPage)*10?Integer.parseInt(currentPage)*10:list.size();
 
-        Page commentList = new Page();
-        commentList.setList(list.subList((Integer.parseInt(page)-1)*10, toIndex));
-        commentList.setPage(Integer.parseInt(page));
-        commentList.setTotal(Long.parseLong(total));
-        commentList.setStart(1);
-        commentList.setPageSize(10);
-        return commentList;
+        Page page = new Page();
+        page.setList(list.subList((Integer.parseInt(currentPage)-1)*10, toIndex));
+        page.setPage(Integer.parseInt(currentPage));
+        page.setTotal(total);
+        page.setStart(1);
+        page.setPageSize(10);
+        long totalPage = total%10==0?total/10:total/10+1;
+        page.setPageTotal(totalPage);
+        return Result.success(page);
     }
 
 
