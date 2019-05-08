@@ -30,3 +30,7 @@ mybatis:
   # 打印sql
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 日志文件配置
+logging:
+  file: logs/gataway/gataway-service-${server.port}.logs

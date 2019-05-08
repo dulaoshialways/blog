@@ -40,4 +40,9 @@ public class Comment {
      * 审核状态 0待审核 1 审核通过 2 审核 未通过
      */
     private Integer state;
+
+    /**
+     * 楼层
+     */
+    private Integer floor;
 }

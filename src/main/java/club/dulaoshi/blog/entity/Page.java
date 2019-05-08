@@ -42,5 +42,5 @@ public class Page<T> {
      */
     private Long pageTotal;
 
-    private List<T> list = new ArrayList<T>();
+    private List<T> list = new ArrayList<>();
 }

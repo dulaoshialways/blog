@@ -1,5 +1,6 @@
 package club.dulaoshi.blog.controller;
 
+import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.dto.IndexDto;
 import club.dulaoshi.blog.entity.Blog;
 import club.dulaoshi.blog.entity.Page;
@@ -36,7 +37,14 @@ public class IndexController {
         this.blogService = blogService;
     }
 
+    /**
+     * 获取博客列表
+     * @param indexDto
+     * @param request
+     * @return
+     */
     @PostMapping(value="/index")
+    @SysLog("获取博客列表")
     public Object index(@RequestBody IndexDto indexDto, HttpServletRequest request){
         String path = "http://" + request.getServerName();
         if(StringUtil.isEmpty(indexDto.getPage())){
