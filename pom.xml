@@ -196,7 +196,7 @@
                         <resource>
                             <targetPath>/</targetPath>
                             <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
+                            <include>blog.jar</include>
                         </resource>
                     </resources>
                 </configuration>

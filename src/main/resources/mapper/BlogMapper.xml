@@ -43,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and DATE_FORMAT(releaseDate, '%Y年%m月') = #{releaseDateStr}
 			</if>
 		</where>
-		order by releaseDate desc
+		order by id desc
 		<if test="start != null and size != null">
 			limit #{start},#{size}
 		</if>
@@ -97,11 +97,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<select id="getlastBlog" parameterType="Integer" resultMap="BlogResult">
-		select * from t_blog where id&lt;#{id} order by id desc limit 1;
+		select * from t_blog where id &gt; #{id} order by id asc limit 1;
 	</select>
 	
 	<select id="getNextBlog" parameterType="Integer" resultMap="BlogResult">
-		select * from t_blog where id&gt;#{id} order by id asc limit 1;
+		select * from t_blog where id &lt; #{id} order by id desc limit 1;
 	</select>
 	
 	<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Blog">

@@ -52,7 +52,7 @@ public class IndexController {
         }
         Page<Blog> page = new Page<>();
         Map<String, Object> map = new HashMap<>(16);
-        map.put("start", Integer.parseInt(indexDto.getPage()));
+        map.put("start", (Integer.parseInt(indexDto.getPage())-1)*page.getPageSize());
         map.put("size", page.getPageSize());
         map.put("releaseDateStr", indexDto.getReleaseDateStr());
         map.put("typeId", indexDto.getTypeId());
