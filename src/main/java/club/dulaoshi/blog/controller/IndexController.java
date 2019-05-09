@@ -1,18 +1,19 @@
 package club.dulaoshi.blog.controller;
 
 import club.dulaoshi.blog.conf.annotation.SysLog;
-import club.dulaoshi.blog.dto.IndexDto;
 import club.dulaoshi.blog.entity.Blog;
 import club.dulaoshi.blog.entity.Page;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.service.BlogService;
 import club.dulaoshi.blog.utils.DateUtil;
-import club.dulaoshi.blog.utils.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -87,7 +88,7 @@ public class IndexController {
         page.setList(blogList);
         page.setPage(currentPage);
         long total = blogService.getTotal(map);
-        long totalPage = total%pageSize==0?total/pageSize:total/pageSize+1;
+        long totalPage = total%page.getPageSize()==0?total/page.getPageSize():total/page.getPageSize()+1;
         page.setPageTotal(totalPage);
         page.setTotal(total);
         return Result.success(page);

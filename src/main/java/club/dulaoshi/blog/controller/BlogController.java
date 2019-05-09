@@ -4,6 +4,8 @@ import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.entity.Blog;
 import club.dulaoshi.blog.entity.Comment;
 import club.dulaoshi.blog.entity.Page;
+import club.dulaoshi.blog.lucene.BlogIndex;
+import club.dulaoshi.blog.lucene.LucenePath;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.service.BlogService;
 import club.dulaoshi.blog.service.CommentService;
@@ -26,10 +28,12 @@ import java.util.Map;
 public class BlogController {
     private final BlogService blogService;
     private final CommentService commentService;
+    private final BlogIndex blogIndex;
 
-    public BlogController(BlogService blogService, CommentService commentService) {
+    public BlogController(BlogService blogService, CommentService commentService, BlogIndex blogIndex) {
         this.blogService = blogService;
         this.commentService = commentService;
+        this.blogIndex = blogIndex;
     }
 
     /**
@@ -57,7 +61,7 @@ public class BlogController {
         map.put("state", 1);
 
 
-        Blog lastBlog = blogService.getlastBlog(id);
+        Blog lastBlog = blogService.getLastBlog(id);
         Blog nextBlog = blogService.getNextBlog(id);
         result.put("blog", blog);
         if(lastBlog == null || lastBlog.getId() == null){
@@ -119,5 +123,38 @@ public class BlogController {
         return Result.success(page);
     }
 
+
+    /**
+     * 博客搜索
+     * @param searchStr
+     * @param currentPage
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    @GetMapping(value="/search")
+    public Object search(@RequestParam(value="searchStr") String searchStr,
+                         @RequestParam(value="page",required=false) Integer currentPage,
+                         @RequestParam(value="pageSize",required=false) Integer pageSize) throws Exception {
+        Page page = new Page();
+        if(null == currentPage){
+            currentPage = 1;
+        }
+
+        if (pageSize != null) {
+            page.setPageSize(pageSize);
+        }
+        List<Blog> list = blogIndex.blogSearch(searchStr);
+
+        int toIndex = list.size() >= currentPage*page.getPageSize()?currentPage*page.getPageSize():list.size();
+        page.setList(list.subList((currentPage-1)*page.getPageSize(), toIndex));
+        page.setPage(currentPage);
+        page.setPageSize(page.getPageSize());
+        long total = (long) list.size();
+        long totalPage = total%page.getPageSize()==0?total/page.getPageSize():total/page.getPageSize()+1;
+        page.setTotal(total);
+        page.setPageTotal(totalPage);
+        return Result.success(page);
+    }
 
 }

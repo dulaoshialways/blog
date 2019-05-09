@@ -49,7 +49,7 @@ public interface BlogDao {
      * @param id
      * @return
      */
-    Blog getlastBlog(Integer id);
+    Blog getLastBlog(Integer id);
 
     /**
      * 获取下一个博客

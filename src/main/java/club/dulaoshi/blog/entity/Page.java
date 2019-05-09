@@ -14,7 +14,7 @@ import java.util.List;
 public class Page<T> {
 
     public Page(){
-        this.page = 0;
+        this.page = 1;
         this.pageSize = 10;
     }
     /**

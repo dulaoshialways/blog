@@ -34,3 +34,7 @@ mybatis:
 # 日志文件配置
 logging:
   file: logs/gataway/gataway-service-${server.port}.logs
+
+lucene:
+#  path : /addata/blog/lucene
+  path : /lucene

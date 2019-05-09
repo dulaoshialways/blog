@@ -16,6 +16,7 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.springframework.stereotype.Component;
 
 import java.io.StringReader;
 import java.nio.file.Paths;
@@ -28,8 +29,15 @@ import java.util.List;
  * @date 2019/5/6 17:31
  * @des 博客索引类
  */
+@Component
 public class BlogIndex {
     private Directory dir;
+
+    private final LucenePath lucenePath;
+
+    public BlogIndex(LucenePath lucenePath) {
+        this.lucenePath = lucenePath;
+    }
 
     /**
      * 获取indexWriter实例
@@ -38,7 +46,7 @@ public class BlogIndex {
      */
     private IndexWriter getWriter()throws Exception{
 //		dir = FSDirectory.open(Paths.get("H://lucene"));
-        dir = FSDirectory.open(Paths.get("/addata/tomcat/apache-tomcat-7.0.47/webapps/Blog/lucene"));
+        dir = FSDirectory.open(Paths.get(lucenePath.getPath()));
         SmartChineseAnalyzer analyzer = new SmartChineseAnalyzer();
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriter writer = new IndexWriter(dir, iwc);
@@ -92,7 +100,7 @@ public class BlogIndex {
      * @throws Exception
      */
     public List<Blog> blogSearch(String searchContent) throws Exception{
-        dir = FSDirectory.open(Paths.get("/addata/tomcat/apache-tomcat-7.0.47/webapps/Blog/lucene"));
+        dir = FSDirectory.open(Paths.get(lucenePath.getPath()));
         IndexReader reader = DirectoryReader.open(dir);
         IndexSearcher is = new IndexSearcher(reader);
         BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
