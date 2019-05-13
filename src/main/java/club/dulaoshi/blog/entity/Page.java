@@ -42,5 +42,10 @@ public class Page<T> {
      */
     private Long pageTotal;
 
+    /**
+     * 搜索字段
+     */
+    private String searchStr;
+
     private List<T> list = new ArrayList<>();
 }

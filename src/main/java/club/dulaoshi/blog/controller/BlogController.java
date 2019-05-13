@@ -89,17 +89,9 @@ public class BlogController {
      */
     @GetMapping(value="/comment/list")
     @SysLog("获取博客评论接口")
-    public Object getCommentList(@RequestParam("page") Integer currentPage,
-                                 @RequestParam("pageSize") Integer pageSize,
+    public Object getCommentList(@RequestParam(value = "page",defaultValue = "1") Integer currentPage,
+                                 @RequestParam(value = "pageSize",defaultValue = "20") Integer pageSize,
                                  @RequestParam("id") Integer id){
-        if(null == currentPage){
-            currentPage = 1;
-        }
-
-        if(null == pageSize){
-            pageSize = 10;
-        }
-
         Map<String, Object> map = new HashMap<>(16);
         map.put("blogId", id);
         map.put("state", 1);
@@ -154,6 +146,7 @@ public class BlogController {
         long totalPage = total%page.getPageSize()==0?total/page.getPageSize():total/page.getPageSize()+1;
         page.setTotal(total);
         page.setPageTotal(totalPage);
+        page.setSearchStr(searchStr);
         return Result.success(page);
     }
 

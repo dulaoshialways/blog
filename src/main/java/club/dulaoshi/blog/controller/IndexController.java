@@ -46,16 +46,13 @@ public class IndexController {
      */
     @GetMapping(value="/blog/list")
     @SysLog("获取博客列表")
-    public Object blogList(@RequestParam("page") Integer currentPage,
+    public Object blogList(@RequestParam(value = "page",defaultValue = "1") Integer currentPage,
                            @RequestParam("pageSize") Integer pageSize,
                            @RequestParam("typeId") Integer typeId,
                            @RequestParam("releaseDateStr") String releaseDateStr,
                            HttpServletRequest request){
         String path = "http://" + request.getServerName();
         Page<Blog> page = new Page<>();
-        if(currentPage == null){
-            currentPage = 1;
-        }
         if(pageSize != null){
             page.setPageSize(pageSize);
         }
