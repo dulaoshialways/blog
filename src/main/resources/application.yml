@@ -36,5 +36,5 @@ logging:
   file: logs/gataway/gataway-service-${server.port}.logs
 
 lucene:
-#  path : /addata/blog/lucene
-  path : /lucene
+  path : /addata/blog/lucene
+#  path : /lucene
