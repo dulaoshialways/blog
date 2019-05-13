@@ -3,7 +3,12 @@ package club.dulaoshi.blog.service.impl;
 import club.dulaoshi.blog.dao.BloggerDao;
 import club.dulaoshi.blog.entity.Blogger;
 import club.dulaoshi.blog.service.BloggerService;
+import club.dulaoshi.blog.utils.RedisUtil;
+import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author djg
@@ -14,8 +19,11 @@ import org.springframework.stereotype.Service;
 public class BloggerServiceImpl  implements BloggerService {
     private final BloggerDao bloggerDao;
 
-    public BloggerServiceImpl(BloggerDao bloggerDao) {
+    private final RedisUtil redisUtil;
+
+    public BloggerServiceImpl(BloggerDao bloggerDao, RedisUtil redisUtil) {
         this.bloggerDao = bloggerDao;
+        this.redisUtil = redisUtil;
     }
 
     @Override
@@ -25,6 +33,15 @@ public class BloggerServiceImpl  implements BloggerService {
 
     @Override
     public Blogger find() {
+//        Map<String, Object> redisBlogger = (Map<String, Object>) redisUtil.get("blogger");
+//        if(redisBlogger == null){
+//            Gson gson = new Gson();
+//            String jsonStr = gson.toJson(redisBlogger);
+//            Blogger user = gson.fromJson(jsonStr, LabUser.class);
+//            Blogger blogger = bloggerDao.find();
+//            redisUtil.set("blogger",blogger);
+//            return blogger;
+//        }
         return bloggerDao.find();
     }
 

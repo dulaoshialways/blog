@@ -3,6 +3,7 @@ package club.dulaoshi.blog.service.impl;
 import club.dulaoshi.blog.dao.LinkDao;
 import club.dulaoshi.blog.entity.Link;
 import club.dulaoshi.blog.service.LinkService;
+import club.dulaoshi.blog.utils.RedisUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +19,22 @@ public class LinkServiceImpl implements LinkService {
 
     private final LinkDao linkDao;
 
-    public LinkServiceImpl(LinkDao linkDao) {
+    private final RedisUtil redisUtil;
+
+    public LinkServiceImpl(LinkDao linkDao, RedisUtil redisUtil) {
         this.linkDao = linkDao;
+        this.redisUtil = redisUtil;
     }
 
     @Override
     public List<Link> list(Map<String, Object> map) {
-        return linkDao.list(map);
+        List<Link> redisList = (List<Link>) redisUtil.get("linkList");
+        if(redisList == null){
+            List<Link> list = linkDao.list(map);
+            redisUtil.set("linkList", list);
+            return list;
+        }
+        return redisList;
     }
 
     @Override
