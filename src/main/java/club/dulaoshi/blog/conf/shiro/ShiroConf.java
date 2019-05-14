@@ -41,8 +41,8 @@ public class ShiroConf {
 
         //设置登录页
 //        shiroFilter.setLoginUrl("/login.html");
-        filterMap.put("/login", "anon");
-        filterMap.put("/admin/**", "authc");
+//        filterMap.put("/login", "anon");
+//        filterMap.put("/admin/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
     }
