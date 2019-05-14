@@ -27,6 +27,9 @@ public class ShiroConf {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         //设置安全管理器
         shiroFilter.setSecurityManager(securityManager);
+        //设置未授权界面 未授权的用户只能访问
+        shiroFilter.setUnauthorizedUrl("/login.html");
+
         /**
          * shiro内置过滤器，可以实现权限相关的拦截器
          * 常用过滤器：
@@ -40,9 +43,9 @@ public class ShiroConf {
         Map<String, String> filterMap = new LinkedHashMap<>();
 
         //设置登录页
-//        shiroFilter.setLoginUrl("/login.html");
-//        filterMap.put("/login", "anon");
-//        filterMap.put("/admin/**", "authc");
+        shiroFilter.setLoginUrl("/login.html");
+        filterMap.put("/login.html", "anon");
+        filterMap.put("/admin/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
     }
