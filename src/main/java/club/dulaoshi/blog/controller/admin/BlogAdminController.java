@@ -1,5 +1,6 @@
 package club.dulaoshi.blog.controller.admin;
 
+import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.entity.Blog;
 import club.dulaoshi.blog.entity.Page;
 import club.dulaoshi.blog.lucene.BlogIndex;
@@ -39,7 +40,8 @@ public class BlogAdminController {
      * @throws Exception
      */
     @PostMapping("/save")
-    public Object save(Blog blog) throws Exception{
+    @SysLog("添加或者修改博客")
+    public Object save(@RequestBody Blog blog) throws Exception{
         int resultTotal;
         if(blog.getId()==null){
             resultTotal = blogService.add(blog);
@@ -64,6 +66,7 @@ public class BlogAdminController {
      * @throws Exception
      */
     @GetMapping("/list")
+    @SysLog("分页查询博客信息")
     public Object list(@RequestParam(value="page",defaultValue = "1")Integer currentPage,
                        @RequestParam(value="pageSize",defaultValue = "10")Integer pageSize,
                        @RequestParam(value="searchStr")String searchStr){
@@ -95,6 +98,7 @@ public class BlogAdminController {
      * @throws Exception
      */
     @GetMapping("/delete")
+    @SysLog("博客信息删除")
     public Object delete(@RequestParam(value="ids",required =false)String ids)throws Exception{
         String[] idsStr = ids.split(",");
         for(int i= 0;i<idsStr.length;i++){
@@ -111,6 +115,7 @@ public class BlogAdminController {
      * @throws Exception
      */
     @GetMapping("/findById")
+    @SysLog("通过id查找博客信息")
     public Object findById(@RequestParam(value="id")String id){
         Blog blog = blogService.findById(Integer.parseInt(id));
         return Result.success(blog);
