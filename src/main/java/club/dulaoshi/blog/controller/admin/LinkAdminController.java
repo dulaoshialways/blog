@@ -35,13 +35,13 @@ public class LinkAdminController {
     }
 
     /**
-     * 分页查询博客信息
+     * 分页查询友情链接信息
      * @param currentPage
      * @param pageSize
      * @return
      */
     @GetMapping("/list")
-    @SysLog("分页查询博客信息")
+    @SysLog("分页友情链接信息")
     public Object list(@RequestParam(value="page",required=false,defaultValue = "1")Integer currentPage,
                        @RequestParam(value="pageSize",required=false,defaultValue = "10")Integer pageSize){
         Map<String,Object> map = new HashMap<>(16);

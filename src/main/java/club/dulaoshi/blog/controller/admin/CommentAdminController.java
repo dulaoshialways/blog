@@ -47,7 +47,7 @@ public class CommentAdminController {
     @SysLog("分页查询评论信息")
     public Object list(@RequestParam(value="page",required=false,defaultValue = "1")Integer currentPage,
                        @RequestParam(value="pageSize",required=false,defaultValue = "10")Integer pageSize,
-                       @RequestParam(value="state",required=false)String state){
+                       @RequestParam(value="state",required=false)Integer state){
         Map<String,Object> map = new HashMap<>(3);
         map.put("state",state);
         map.put("start", currentPage-1);

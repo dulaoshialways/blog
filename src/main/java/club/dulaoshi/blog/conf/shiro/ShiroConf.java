@@ -43,9 +43,9 @@ public class ShiroConf {
         Map<String, String> filterMap = new LinkedHashMap<>();
 
         //设置登录页
-        shiroFilter.setLoginUrl("/login.html");
-        filterMap.put("/login.html", "anon");
-        filterMap.put("/admin/**", "authc");
+//        shiroFilter.setLoginUrl("/login.html");
+//        filterMap.put("/login.html", "anon");
+//        filterMap.put("/admin/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
     }

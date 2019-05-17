@@ -116,8 +116,8 @@ public class BlogAdminController {
      */
     @GetMapping("/findById")
     @SysLog("通过id查找博客信息")
-    public Object findById(@RequestParam(value="id")String id){
-        Blog blog = blogService.findById(Integer.parseInt(id));
+    public Object findById(@RequestParam(value="id")Integer id){
+        Blog blog = blogService.findById(id);
         return Result.success(blog);
     }
 }
