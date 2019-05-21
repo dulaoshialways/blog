@@ -2,13 +2,16 @@ package club.dulaoshi.blog.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author djg
  * @date 2019/5/6 16:04
  * @des 博主实体
  */
 @Data
-public class Blogger {
+public class Blogger implements Serializable {
+    private static final long serialVersionUID = -2491836800405216262L;
     /**
      * 编号
      */

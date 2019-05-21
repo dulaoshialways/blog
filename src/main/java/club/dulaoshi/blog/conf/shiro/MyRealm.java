@@ -38,7 +38,7 @@ public class MyRealm extends AuthorizingRealm {
         Blogger blogger = bloggerService.getByUserName(userName);
         if(userName!=null){
             //把当前用户信息存到session中
-            SecurityUtils.getSubject().getSession().setAttribute("currentUser", blogger);
+//            SecurityUtils.getSubject().getSession().setAttribute("currentUser", blogger);
             AuthenticationInfo authenInfo = new SimpleAuthenticationInfo(blogger.getUserName(), blogger.getPassword(), "xxx");
             return authenInfo;
         }else{

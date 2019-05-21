@@ -1,11 +1,12 @@
 package club.dulaoshi.blog.conf.shiro;
 
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
@@ -74,10 +75,10 @@ public class ShiroConf {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //关联Realm
         securityManager.setRealm(myRealm);
-        // 自定义session管理 使用redis
-        securityManager.setSessionManager(sessionManager());
-//        // 自定义缓存实现 使用redis
-        securityManager.setCacheManager(redisCacheManager());
+//        // 自定义session管理 使用redis
+//        securityManager.setSessionManager(sessionManager());
+////        // 自定义缓存实现 使用redis
+//        securityManager.setCacheManager(redisCacheManager());
         return securityManager;
     }
 
@@ -87,8 +88,16 @@ public class ShiroConf {
      */
     @Bean("sessionManager")
     public SessionManager sessionManager() {
+        SimpleCookie simpleCookie = new SimpleCookie("Token");
+        simpleCookie.setPath("/");
+        simpleCookie.setHttpOnly(false);
+
         MySessionManager mySessionManager = new MySessionManager();
         mySessionManager.setSessionDAO(redisSessionDAO());
+        mySessionManager.setSessionIdCookieEnabled(false);
+        mySessionManager.setSessionIdUrlRewritingEnabled(false);
+        mySessionManager.setDeleteInvalidSessions(true);
+        mySessionManager.setSessionIdCookie(simpleCookie);
         return mySessionManager;
     }
 
