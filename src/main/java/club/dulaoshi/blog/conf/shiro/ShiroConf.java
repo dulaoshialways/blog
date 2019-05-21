@@ -1,8 +1,16 @@
 package club.dulaoshi.blog.conf.shiro;
 
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,18 +25,29 @@ import java.util.Map;
 @Configuration
 public class ShiroConf {
 
+    @Value("${spring.redis.host}")
+    private String host;
+    @Value("${spring.redis.port}")
+    private int port;
+    @Value("${spring.redis.timeout}")
+    private int timeout;
+    @Value("${spring.redis.password}")
+    private String password;
+    @Value("${spring.redis.database}")
+    private int database;
+
     /**
      * 创建ShiroFilterFactoryBean
      * @param securityManager
      * @return
      */
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") DefaultWebSecurityManager securityManager){
+    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         //设置安全管理器
         shiroFilter.setSecurityManager(securityManager);
         //设置未授权界面 未授权的用户只能访问
-        shiroFilter.setUnauthorizedUrl("/login.html");
+//        shiroFilter.setUnauthorizedUrl("/login.html");
 
         /**
          * shiro内置过滤器，可以实现权限相关的拦截器
@@ -43,8 +62,8 @@ public class ShiroConf {
         Map<String, String> filterMap = new LinkedHashMap<>();
 
         //设置登录页
-//        shiroFilter.setLoginUrl("/login.html");
-//        filterMap.put("/login.html", "anon");
+        shiroFilter.setLoginUrl("/blogger/login");
+        filterMap.put("/", "anon");
 //        filterMap.put("/admin/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
@@ -55,11 +74,68 @@ public class ShiroConf {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //关联Realm
         securityManager.setRealm(myRealm);
+        // 自定义session管理 使用redis
+        securityManager.setSessionManager(sessionManager());
+//        // 自定义缓存实现 使用redis
+        securityManager.setCacheManager(redisCacheManager());
         return securityManager;
     }
+
+    /**
+     * 自定义sessionManager
+     * @return
+     */
+    @Bean("sessionManager")
+    public SessionManager sessionManager() {
+        MySessionManager mySessionManager = new MySessionManager();
+        mySessionManager.setSessionDAO(redisSessionDAO());
+        return mySessionManager;
+    }
+
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(host);
+        redisManager.setTimeout(timeout);
+        redisManager.setPassword(password);
+        redisManager.setDatabase(database);
+        return redisManager;
+    }
+
+    @Bean
+    public RedisCacheManager redisCacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        return redisCacheManager;
+    }
+
+    @Bean
+    public RedisSessionDAO redisSessionDAO() {
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager());
+        return redisSessionDAO;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
+    /**
+     * shiro生命周期处理器
+     * 此方法需要用static作为修饰词，否则无法通过@Value()注解的方式获取配置文件的值
+     * @return
+     */
+    @Bean
+    public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
 
     @Bean("myRealm")
     public MyRealm userRealm(){
         return new MyRealm();
     }
+
 }

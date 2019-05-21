@@ -6,10 +6,10 @@ import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.result.ResultCode;
 import club.dulaoshi.blog.service.BloggerService;
 import club.dulaoshi.blog.utils.CryptographyUtil;
+import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,11 +44,22 @@ public class BloggerController {
         try {
             //登陆认证，调用realm中的验证方法
             subject.login(token);
+            if (subject.isAuthenticated()) {
+                JSON json = new JSONObject();
+                ((JSONObject) json).put("token", subject.getSession().getId());
 
-            return Result.success();
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            return Result.fail(ResultCode.UNKNOWN_EXCEPTION.getCode(), "登录失败");
+                return Result.success(json);
+            }else {
+                return Result.fail(ResultCode.UNKNOWN_EXCEPTION.getCode());
+            }
+        }catch (UnknownAccountException e) {
+            return Result.fail(ResultCode.UNKNOWN_EXCEPTION.getCode(),e.getMessage());
+        }catch (IncorrectCredentialsException e) {
+            return Result.fail(ResultCode.UNKNOWN_EXCEPTION.getCode(),"账号或密码不正确");
+        }catch (LockedAccountException e) {
+            return Result.fail(ResultCode.UNKNOWN_EXCEPTION.getCode(),"账号已被锁定,请联系管理员");
+        }catch (AuthenticationException e) {
+            return Result.fail(ResultCode.UNKNOWN_EXCEPTION.getCode(),"账户验证失败");
         }
     }
 }
