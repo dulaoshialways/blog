@@ -1,5 +1,6 @@
 package club.dulaoshi.blog.conf.shiro;
 
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -64,8 +65,8 @@ public class ShiroConf {
 
         //设置登录页
         shiroFilter.setLoginUrl("/blogger/login");
-        filterMap.put("/", "anon");
-//        filterMap.put("/admin/**", "authc");
+//        filterMap.put("/", "anon");
+        filterMap.put("/admin/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
     }
@@ -75,10 +76,10 @@ public class ShiroConf {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //关联Realm
         securityManager.setRealm(myRealm);
-//        // 自定义session管理 使用redis
-//        securityManager.setSessionManager(sessionManager());
-////        // 自定义缓存实现 使用redis
-//        securityManager.setCacheManager(redisCacheManager());
+        // 自定义session管理 使用redis
+        securityManager.setSessionManager(sessionManager());
+        // 自定义缓存实现 使用redis
+        securityManager.setCacheManager(redisCacheManager());
         return securityManager;
     }
 
@@ -114,6 +115,8 @@ public class ShiroConf {
     public RedisCacheManager redisCacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
+        //设置前缀
+        redisCacheManager.setKeyPrefix("SPRINGBOOT_CACHE:");
         return redisCacheManager;
     }
 
@@ -121,6 +124,8 @@ public class ShiroConf {
     public RedisSessionDAO redisSessionDAO() {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());
+        redisSessionDAO.setKeyPrefix("SPRINGBOOT_SESSION:");
+        redisSessionDAO.setExpire(3600*24*15);
         return redisSessionDAO;
     }
 

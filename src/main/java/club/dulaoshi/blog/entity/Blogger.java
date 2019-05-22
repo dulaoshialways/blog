@@ -10,8 +10,7 @@ import java.io.Serializable;
  * @des 博主实体
  */
 @Data
-public class Blogger implements Serializable {
-    private static final long serialVersionUID = -2491836800405216262L;
+public class Blogger{
     /**
      * 编号
      */

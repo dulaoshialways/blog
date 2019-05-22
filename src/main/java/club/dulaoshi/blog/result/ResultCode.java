@@ -44,7 +44,19 @@ public enum ResultCode {
      * 未知异常及自定义异常
      */
     UNKNOWN_EXCEPTION(50000, "未知异常"),
-    EXCEPTION_OTHER(50001, "自定义异常");
+    EXCEPTION_OTHER(50001, "自定义异常"),
+
+
+    /**
+     * 拦截器异常
+     */
+    SYSTEM_ERR(500, "服务器运行异常"),
+    BAD_REQUEST(400, "参数解析失败"),
+    INVALID_TOKEN(401, "无效的授权码"),
+    INVALID_CLIENTID(402, "无效的密钥"),
+    METHOD_NOT_ALLOWED(405, "不支持当前请求方法"),
+    UNAUTHO_ERROR(10004, "您没有该权限"),
+    ;
 
     private int code;
     private String message;

@@ -73,7 +73,7 @@ public class BloggerAdminController {
      * @return
      * @throws Exception
      */
-    @PostMapping("modifyPassword")
+    @PostMapping("/modifyPassword")
     @SysLog("修改密码")
     public Object modifyPassword(String newPassword)throws Exception{
         Blogger blogger = new Blogger();
@@ -90,10 +90,10 @@ public class BloggerAdminController {
      * 退出登陆
      * @return
      */
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     @SysLog("退出登陆")
-    public String logout(){
+    public Object logout(){
         SecurityUtils.getSubject().logout();
-        return "login.html";
+        return Result.success();
     }
 }
