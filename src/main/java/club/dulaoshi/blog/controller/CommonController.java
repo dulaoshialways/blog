@@ -94,4 +94,10 @@ public class CommonController {
 
         return Result.success(blogClassified);
     }
+
+
+    @RequestMapping(value="/unauth")
+    public Object unauth(){
+        return Result.fail(ResultCode.UNAUTHO_ERROR.getCode());
+    }
 }

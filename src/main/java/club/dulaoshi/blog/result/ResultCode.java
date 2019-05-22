@@ -55,7 +55,7 @@ public enum ResultCode {
     INVALID_TOKEN(401, "无效的授权码"),
     INVALID_CLIENTID(402, "无效的密钥"),
     METHOD_NOT_ALLOWED(405, "不支持当前请求方法"),
-    UNAUTHO_ERROR(10004, "您没有该权限"),
+    UNAUTHO_ERROR(406, "您没有该权限"),
     ;
 
     private int code;

@@ -49,7 +49,9 @@ public class ShiroConf {
         //设置安全管理器
         shiroFilter.setSecurityManager(securityManager);
         //设置未授权界面 未授权的用户只能访问
-//        shiroFilter.setUnauthorizedUrl("/login.html");
+        shiroFilter.setUnauthorizedUrl("/common/unauth");
+        //设置登录页
+        shiroFilter.setLoginUrl("/common/unauth");
 
         /**
          * shiro内置过滤器，可以实现权限相关的拦截器
@@ -63,9 +65,7 @@ public class ShiroConf {
         //添加shiro内置过滤器
         Map<String, String> filterMap = new LinkedHashMap<>();
 
-        //设置登录页
-        shiroFilter.setLoginUrl("/blogger/login");
-//        filterMap.put("/", "anon");
+        filterMap.put("/", "anon");
         filterMap.put("/admin/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
