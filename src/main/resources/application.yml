@@ -6,13 +6,13 @@ server:
 # spring 配置
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/db_blog?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://118.190.216.106:3306/db_blog?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: fuckallhacker
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   redis:
-    host: localhost
+    host: 118.190.216.106
     port: 6379
     password: 123456
     timeout: 5500
