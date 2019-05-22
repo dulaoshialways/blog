@@ -3,10 +3,7 @@ package club.dulaoshi.blog.conf.shiro;
 import club.dulaoshi.blog.entity.Blogger;
 import club.dulaoshi.blog.service.BloggerService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -33,8 +30,9 @@ public class MyRealm extends AuthorizingRealm {
      * 验证当前登陆的用户
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String userName = (String) token.getPrincipal();
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
+        UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+        String userName = token.getUsername();
         Blogger blogger = bloggerService.getByUserName(userName);
         if(userName!=null){
             //把当前用户信息存到session中
