@@ -117,6 +117,7 @@ public class ShiroConf {
         redisCacheManager.setRedisManager(redisManager());
         //设置前缀
         redisCacheManager.setKeyPrefix("SPRINGBOOT_CACHE:");
+        redisCacheManager.setPrincipalIdFieldName("id");
         return redisCacheManager;
     }
 

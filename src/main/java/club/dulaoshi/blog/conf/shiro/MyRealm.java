@@ -32,8 +32,8 @@ public class MyRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
-        UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-        String userName = token.getUsername();
+//        UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+        String userName = (String) authcToken.getPrincipal();
         Blogger blogger = bloggerService.getByUserName(userName);
         if (userName != null) {
             //把当前用户信息存到session中

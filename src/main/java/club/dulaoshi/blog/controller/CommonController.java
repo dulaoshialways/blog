@@ -8,13 +8,13 @@ import club.dulaoshi.blog.service.BlogTypeService;
 import club.dulaoshi.blog.service.BloggerService;
 import club.dulaoshi.blog.service.LinkService;
 import club.dulaoshi.blog.utils.RedisUtil;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,6 +98,7 @@ public class CommonController {
 
     @RequestMapping(value="/unauth")
     public Object unauth(){
+        SecurityUtils.getSubject().logout();
         return Result.fail(ResultCode.UNAUTHO_ERROR.getCode());
     }
 }
