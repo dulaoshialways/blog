@@ -19,7 +19,7 @@ import java.io.Serializable;
  * @des 自定义sessionId获取
  */
 public class MySessionManager extends DefaultWebSessionManager  {
-    private static final String AUTHORIZATION = "Authorization";
+    private static final String AUTHORIZATION = "Token";
 
     private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";
 

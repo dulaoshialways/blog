@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @des 博主实体
  */
 @Data
-public class Blogger{
+public class Blogger implements Serializable{
     /**
      * 编号
      */
