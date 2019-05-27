@@ -1,5 +1,6 @@
 package club.dulaoshi.blog.controller;
 
+import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.entity.*;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.result.ResultCode;
@@ -8,6 +9,8 @@ import club.dulaoshi.blog.service.BlogTypeService;
 import club.dulaoshi.blog.service.BloggerService;
 import club.dulaoshi.blog.service.LinkService;
 import club.dulaoshi.blog.utils.RedisUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/common")
+@Api("博客公共信息")
 public class CommonController {
 
     private static Logger logger = LoggerFactory.getLogger(CommonController.class);
@@ -48,6 +52,8 @@ public class CommonController {
      * @return
      */
     @GetMapping(value="/link/list")
+    @SysLog("查询友情链接列表")
+    @ApiOperation("查询友情链接列表")
     public Object getLinkList(){
         List<Link> list = (List<Link>) redisUtil.get("linkList");
         //双重校验锁
@@ -64,6 +70,8 @@ public class CommonController {
      * @return
      */
     @GetMapping(value="/blog/type/list")
+    @SysLog("查询博客类别")
+    @ApiOperation("查询博客类别")
     public Object getBlogTypeCountList(){
         List<BlogType> blogTypes = blogTypeService.countList();
         return Result.success(blogTypes);
@@ -74,6 +82,8 @@ public class CommonController {
      * @return
      */
     @GetMapping(value="/blog/classified")
+    @SysLog("获取博客分类信息")
+    @ApiOperation("获取博客分类信息")
     public Object refreshSystem(){
         BlogClassified blogClassified = new BlogClassified();
         // 获取博主信息
@@ -97,6 +107,8 @@ public class CommonController {
 
 
     @RequestMapping(value="/unauth")
+    @SysLog("未授权登录")
+    @ApiOperation("未授权登录")
     public Object unauth(){
         SecurityUtils.getSubject().logout();
         return Result.fail(ResultCode.UNAUTHO_ERROR.getCode());

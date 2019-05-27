@@ -6,8 +6,9 @@ import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.result.ResultCode;
 import club.dulaoshi.blog.service.BloggerService;
 import club.dulaoshi.blog.utils.CryptographyUtil;
-import net.sf.json.JSON;
-import net.sf.json.JSONObject;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author djg
  * @date 2019/5/17 14:17
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/blogger")
+@Api("博主controller层")
 public class BloggerController {
     private final BloggerService bloggerService;
 
@@ -38,6 +43,8 @@ public class BloggerController {
      */
     @PostMapping(value = "/login")
     @SysLog("用户登录")
+    @ApiOperation(value = "用户登录")
+    @ApiImplicitParam(name = "blogger", value = "用户实体", required = true, dataType = "Object", paramType = "path")
     public Object login(@RequestBody Blogger blogger){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(blogger.getUserName(), CryptographyUtil.md5(blogger.getPassword(), "java1234"));
@@ -45,10 +52,11 @@ public class BloggerController {
             //登陆认证，调用realm中的验证方法
             subject.login(token);
             if (subject.isAuthenticated()) {
-                JSON json = new JSONObject();
-                ((JSONObject) json).put("token", subject.getSession().getId());
+                Map<String, Object> result = new HashMap<>(16);
+                result.put("token", subject.getSession().getId());
+                result.put("userInfo", subject.getSession().getAttribute("userInfo"));
 
-                return Result.success(json);
+                return Result.success(result);
             }else {
                 return Result.fail(ResultCode.UNKNOWN_EXCEPTION.getCode());
             }

@@ -8,6 +8,8 @@ import club.dulaoshi.blog.result.ResultCode;
 import club.dulaoshi.blog.service.BlogService;
 import club.dulaoshi.blog.service.BlogTypeService;
 import club.dulaoshi.blog.utils.RedisUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/admin/blogType")
+@Api("管理员博客类别")
 public class BlogTypeAdminController {
 
     private final BlogTypeService blogTypeService;
@@ -43,6 +46,7 @@ public class BlogTypeAdminController {
      */
     @GetMapping("/list")
     @SysLog("分页查询博客类别信息")
+    @ApiOperation("分页查询博客类别信息")
     public Object list(@RequestParam(value="page",required=false,defaultValue = "1")Integer currentPage,
                        @RequestParam(value="pageSize",required=false,defaultValue = "10")Integer pageSize){
         Map<String,Object> map = new HashMap<>(16);
@@ -68,6 +72,7 @@ public class BlogTypeAdminController {
      */
     @PostMapping("/save")
     @SysLog("添加或者修改博客类别")
+    @ApiOperation("添加或者修改博客类别")
     public Object save(@RequestBody BlogType blogType){
         int resultTotal;
         if(blogType.getId()==null){
@@ -90,6 +95,7 @@ public class BlogTypeAdminController {
      */
     @GetMapping("/delete")
     @SysLog("博客类别删除")
+    @ApiOperation("博客类别删除")
     public Object delete(@RequestParam(value="ids",required =false)String ids){
         String[] idsStr = ids.split(",");
         for(int i= 0;i<idsStr.length;i++){

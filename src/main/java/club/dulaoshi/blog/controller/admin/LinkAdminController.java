@@ -3,17 +3,14 @@ package club.dulaoshi.blog.controller.admin;
 import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.entity.Link;
 import club.dulaoshi.blog.entity.Page;
-import club.dulaoshi.blog.entity.PageBean;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.result.ResultCode;
 import club.dulaoshi.blog.service.LinkService;
 import club.dulaoshi.blog.utils.RedisUtil;
-import club.dulaoshi.blog.utils.ResponseUtil;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +18,11 @@ import java.util.Map;
 /**
  * @author djg
  * @date 2019/5/15 17:43
- * @des
+ * @des 友情链接
  */
 @RestController
 @RequestMapping("/admin/link")
+@Api("友情链接")
 public class LinkAdminController {
     private final LinkService linkService;
     private final RedisUtil redisUtil;
@@ -42,6 +40,7 @@ public class LinkAdminController {
      */
     @GetMapping("/list")
     @SysLog("分页友情链接信息")
+    @ApiOperation("分页友情链接信息")
     public Object list(@RequestParam(value="page",required=false,defaultValue = "1")Integer currentPage,
                        @RequestParam(value="pageSize",required=false,defaultValue = "10")Integer pageSize){
         Map<String,Object> map = new HashMap<>(16);
@@ -67,6 +66,7 @@ public class LinkAdminController {
      */
     @PostMapping("/save")
     @SysLog("添加或者修改友情链接")
+    @ApiOperation("添加或者修改友情链接")
     public Object save(@RequestBody Link link){
         int resultTotal;
         if(link.getId()==null){
@@ -90,6 +90,7 @@ public class LinkAdminController {
      */
     @PostMapping("/delete")
     @SysLog("友情链接删除")
+    @ApiOperation("友情链接删除")
     public Object delete(@RequestParam(value="ids",required =false)String ids){
         String[] idsStr = ids.split(",");
         for(int i= 0;i<idsStr.length;i++){

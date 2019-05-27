@@ -7,6 +7,8 @@ import club.dulaoshi.blog.result.ResultCode;
 import club.dulaoshi.blog.service.BloggerService;
 import club.dulaoshi.blog.utils.CryptographyUtil;
 import club.dulaoshi.blog.utils.DateUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import java.io.File;
  */
 @RestController
 @RequestMapping("/admin/blogger")
+@Api("博客信息controller")
 public class BloggerAdminController {
     private final BloggerService bloggerService;
 
@@ -34,6 +37,7 @@ public class BloggerAdminController {
      */
     @GetMapping("/find")
     @SysLog("查询博主信息")
+    @ApiOperation("查询博主信息")
     public Object find(){
         Blogger blogger = bloggerService.find();
         return Result.success(blogger);
@@ -49,6 +53,7 @@ public class BloggerAdminController {
      */
     @PostMapping("/save")
     @SysLog("修改博主信息")
+    @ApiOperation("修改博主信息")
     public Object save(HttpServletRequest request,
                        @RequestParam(value="imageFile") MultipartFile imageFile,
                        @RequestBody Blogger blogger)throws Exception{
@@ -75,6 +80,7 @@ public class BloggerAdminController {
      */
     @PostMapping("/modifyPassword")
     @SysLog("修改密码")
+    @ApiOperation("修改密码")
     public Object modifyPassword(String newPassword)throws Exception{
         Blogger blogger = new Blogger();
         blogger.setPassword(CryptographyUtil.md5(newPassword, "java1234"));
@@ -92,6 +98,7 @@ public class BloggerAdminController {
      */
     @PostMapping("/logout")
     @SysLog("退出登陆")
+    @ApiOperation("退出登陆")
     public Object logout(){
         SecurityUtils.getSubject().logout();
         return Result.success();

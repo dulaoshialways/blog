@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="content" column="content"/>
 		<result property="keyWord" column="keyWord"/>
 		
-		<association property="blogType" column="typeId" select="club.dulaoshi.blog.dao.BlogTypeDao.findById"></association>
+<!--		<association property="blogType" column="typeId" select="club.dulaoshi.blog.dao.BlogTypeDao.findById"></association>-->
 	</resultMap>
 	
 	
@@ -31,19 +31,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="list" parameterType="Map" resultMap="BlogResult">
-		select * from t_blog
+		select
+			tb.id,
+			tb.title,
+			tb.summary,
+			tb.releaseDate,
+			tb.clickHit,
+			tb.replyHit,
+			tb.content,
+			tbt.typeName,
+			tb.keyWord
+		from t_blog tb left join t_blogtype tbt on tb.typeId = tbt.id
 		<where>
 			<if test="title != null and title != ''">
-				and title like #{title}
+				and tb.title like #{title}
 			</if>
 			<if test="typeId != null and typeId != ''">
-				and typeId = #{typeId}
+				and tbt.id = #{typeId}
 			</if>
 			<if test="releaseDateStr != null and releaseDateStr != ''">
-				and DATE_FORMAT(releaseDate, '%Y年%m月') = #{releaseDateStr}
+				and DATE_FORMAT(tb.releaseDate, '%Y年%m月') = #{releaseDateStr}
 			</if>
 		</where>
-		order by id desc
+		order by tb.id desc
 		<if test="start != null and size != null">
 			limit #{start},#{size}
 		</if>
@@ -65,7 +75,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="findById" parameterType="Integer" resultMap="BlogResult">
-		select * from t_blog where id=#{id}
+		select
+			tb.id,
+			tb.title,
+			tb.summary,
+			tb.releaseDate,
+			tb.clickHit,
+			tb.replyHit,
+			tb.content,
+			tbt.typeName,
+			tb.keyWord
+		from t_blog
+			tb left join t_blogtype tbt on tb.typeId = tbt.id
+		where tb.id=#{id}
 	</select>
 	
 	<update id="update" parameterType="Blog">
@@ -77,8 +99,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="content != null and content !=''">
 				content = #{content},
 			</if>
-			<if test="blogType.id != null">
-				typeId = #{blogType.id},
+			<if test="typeId != null">
+				typeId = #{typeId},
 			</if>
 			<if test="keyWord != null and keyWord != ''">
 				keyWord = #{keyWord},
@@ -105,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Blog">
-		insert into t_blog values(null,#{title},#{summary},now(),0,0,#{content},#{blogType.id},#{keyWord})	
+		insert into t_blog values(null,#{title},#{summary},now(),0,0,#{content},#{typeId},#{keyWord})
 	</insert>
 	
 	<delete id="delete" parameterType="Integer">

@@ -6,6 +6,8 @@ import club.dulaoshi.blog.entity.Page;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.service.BlogService;
 import club.dulaoshi.blog.utils.DateUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,6 +29,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/")
+@Api("首页controller")
 public class IndexController {
 
     private final BlogService blogService;
@@ -46,6 +49,7 @@ public class IndexController {
      */
     @GetMapping(value="/blog/list")
     @SysLog("获取博客列表")
+    @ApiOperation("获取博客列表")
     public Object blogList(@RequestParam(value = "page",defaultValue = "1") Integer currentPage,
                            @RequestParam("pageSize") Integer pageSize,
                            @RequestParam("typeId") Integer typeId,

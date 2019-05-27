@@ -6,6 +6,8 @@ import club.dulaoshi.blog.entity.Page;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.service.CommentService;
 import club.dulaoshi.blog.utils.DateUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +24,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/admin/comment")
+@Api("后台评论管理")
 public class CommentAdminController {
     private final CommentService commentService;
 
@@ -39,6 +42,7 @@ public class CommentAdminController {
      */
     @GetMapping("/list")
     @SysLog("分页查询评论信息")
+    @ApiOperation("分页查询评论信息")
     public Object list(@RequestParam(value="page",required=false,defaultValue = "1")Integer currentPage,
                        @RequestParam(value="pageSize",required=false,defaultValue = "10")Integer pageSize,
                        @RequestParam(value="state",required=false)Integer state){
@@ -71,6 +75,7 @@ public class CommentAdminController {
      */
     @GetMapping("/review")
     @SysLog("博客评论审核")
+    @ApiOperation("博客评论审核")
     public Object review(@RequestParam(value="ids",required =false)String ids,
                          @RequestParam(value="state",required =false)Integer state){
         String[] idsStr = ids.split(",");
@@ -90,6 +95,7 @@ public class CommentAdminController {
      */
     @GetMapping("/delete")
     @SysLog("博客评论删除")
+    @ApiOperation("博客评论删除")
     public Object delete(@RequestParam(value="ids",required =false)String ids){
         String[] idsStr = ids.split(",");
         for(int i= 0;i<idsStr.length;i++){

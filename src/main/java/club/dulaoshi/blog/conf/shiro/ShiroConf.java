@@ -66,7 +66,7 @@ public class ShiroConf {
         Map<String, String> filterMap = new LinkedHashMap<>();
 
         filterMap.put("/", "anon");
-        filterMap.put("/admin/**", "authc");
+//        filterMap.put("/admin/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
     }

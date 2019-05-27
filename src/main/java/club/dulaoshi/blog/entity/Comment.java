@@ -50,4 +50,9 @@ public class Comment {
      * 楼层
      */
     private Integer floor;
+
+    /**
+     * 博客id
+     */
+    private Integer blogId;
 }

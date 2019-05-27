@@ -56,7 +56,7 @@ public class Blog {
     /**
      * 博客类型
      */
-    private BlogType blogType;
+    private Integer typeId;
 
     /**
      * 关键字 空格隔开
@@ -77,4 +77,9 @@ public class Blog {
      * 博客里存在的图片，主要用于列表缩略图的展示
      */
     private List<String> imageList = new LinkedList<>();
+
+    /**
+     * 博客类型标题
+     */
+    private String typeName;
 }
