@@ -27,4 +27,11 @@ public interface BloggerService {
      * @return
      */
     Integer update(Blogger blogger);
+
+    /**
+     * 根据用户id获取用户当前密码
+     * @param userId
+     * @return
+     */
+    Blogger getById(Integer userId);
 }

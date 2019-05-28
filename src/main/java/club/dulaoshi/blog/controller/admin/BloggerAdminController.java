@@ -35,34 +35,32 @@ public class BloggerAdminController {
      * 查询博主信息
      * @return
      */
-    @GetMapping("/find")
+    @GetMapping("/find/user")
     @SysLog("查询博主信息")
     @ApiOperation("查询博主信息")
-    public Object find(){
-        Blogger blogger = bloggerService.find();
+    public Object find(@RequestParam Integer userId){
+        Blogger blogger = bloggerService.getById(userId);
         return Result.success(blogger);
     }
 
     /**
      * 修改博主信息
-     * @param request
      * @param imageFile
      * @param blogger
      * @return
      * @throws Exception
      */
-    @PostMapping("/save")
+    @PostMapping("/update/user")
     @SysLog("修改博主信息")
     @ApiOperation("修改博主信息")
-    public Object save(HttpServletRequest request,
-                       @RequestParam(value="imageFile") MultipartFile imageFile,
+    public Object save(@RequestParam(value="imageFile",required = false) MultipartFile imageFile,
                        @RequestBody Blogger blogger)throws Exception{
-        if(!imageFile.isEmpty()){
-            String filePath = request.getServletContext().getRealPath("/");
-            String imageName = DateUtil.getCurrentDateStr()+"."+imageFile.getOriginalFilename().split("\\.")[1];
-            imageFile.transferTo(new File(filePath+"static/userImages/"+imageName));
-            blogger.setImageName(imageName);
-        }
+//        if(!imageFile.isEmpty()){
+//            String filePath = request.getServletContext().getRealPath("/");
+//            String imageName = DateUtil.getCurrentDateStr()+"."+imageFile.getOriginalFilename().split("\\.")[1];
+//            imageFile.transferTo(new File(filePath+"static/userImages/"+imageName));
+//            blogger.setImageName(imageName);
+//        }
         int resultTotal = bloggerService.update(blogger);
         if(resultTotal > 0){
             return Result.success();
@@ -74,16 +72,23 @@ public class BloggerAdminController {
 
     /**
      * 修改密码
-     * @param newPassword
+     * @param blogger
      * @return
      * @throws Exception
      */
     @PostMapping("/modifyPassword")
     @SysLog("修改密码")
     @ApiOperation("修改密码")
-    public Object modifyPassword(String newPassword)throws Exception{
-        Blogger blogger = new Blogger();
-        blogger.setPassword(CryptographyUtil.md5(newPassword, "java1234"));
+    public Object modifyPassword(@RequestBody Blogger blogger){
+        //获取当前用户的密码
+        String password = bloggerService.getById(blogger.getId()).getPassword();
+
+        //验证密码一致性
+        if (!password.equals(CryptographyUtil.md5(blogger.getPassword(), "java1234"))) {
+            return Result.fail(ResultCode.UNKNOWN_EXCEPTION.getCode(), "密码验证失败");
+        }
+
+        blogger.setPassword(CryptographyUtil.md5(blogger.getNewPassword(), "java1234"));
         int resultTotal = bloggerService.update(blogger);
         if(resultTotal > 0){
             return Result.success();

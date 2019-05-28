@@ -82,4 +82,10 @@ public class Blog {
      * 博客类型标题
      */
     private String typeName;
+
+    /**
+     * 删除标志位
+     */
+    private Integer flag;
+
 }

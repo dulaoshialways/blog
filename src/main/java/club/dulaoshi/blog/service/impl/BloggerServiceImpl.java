@@ -49,4 +49,9 @@ public class BloggerServiceImpl  implements BloggerService {
     public Integer update(Blogger blogger) {
         return bloggerDao.update(blogger);
     }
+
+    @Override
+    public Blogger getById(Integer userId) {
+        return bloggerDao.getById(userId);
+    }
 }

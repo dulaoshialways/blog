@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getByUserName" parameterType="String" resultMap="BloggerResult">
 		select * from t_blogger tb where userName = #{userName}
 	</select>
-	
+
 	<select id="find" resultMap="BloggerResult">
 		select * from t_blogger where id = 1
 	</select>
@@ -43,4 +43,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</set>
 		where id = 1
 	</update>
+
+
+	<select id="getById" parameterType="integer" resultMap="BloggerResult">
+		select * from t_blogger tb where tb.id = #{id}
+	</select>
 </mapper> 

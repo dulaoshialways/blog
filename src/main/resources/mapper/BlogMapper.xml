@@ -43,6 +43,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			tb.keyWord
 		from t_blog tb left join t_blogtype tbt on tb.typeId = tbt.id
 		<where>
+			<if test="flag != null and flag != ''">
+				flag = #{flag}
+			</if>
 			<if test="title != null and title != ''">
 				and tb.title like #{title}
 			</if>
@@ -62,6 +65,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getTotal" parameterType="Map" resultType="Long">
 		select count(*) from t_blog
 		<where>
+			<if test="flag != null and flag != ''">
+				flag = #{flag}
+			</if>
 			<if test="title != null and title != ''">
 				and title like #{title}
 			</if>
@@ -127,16 +133,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Blog">
-		insert into t_blog values(null,#{title},#{summary},now(),0,0,#{content},#{typeId},#{keyWord})
+		insert into t_blog values(null,#{title},#{summary},now(),0,0,#{content},#{typeId},#{keyWord},0)
 	</insert>
 	
-	<delete id="delete" parameterType="Integer">
-		delete from t_blog where id =#{id}
-	</delete>
+	<update id="delete" parameterType="Integer">
+		update t_blog tb set tb.flag = 1 where tb.id =#{id}
+	</update>
 	
 	
 	<select id="getBlogByTypeId" parameterType="Integer" resultType="Integer">
-		select count(*) from t_blog where typeId = #{typeId}
+		select count(*) from t_blog tb where tb.typeId = #{typeId} and  tb.flag = 1
 	</select>
 	
 </mapper> 

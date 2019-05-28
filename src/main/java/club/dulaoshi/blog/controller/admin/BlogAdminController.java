@@ -67,18 +67,19 @@ public class BlogAdminController {
      * @param pageSize
      * @param searchStr
      * @return
-     * @throws Exception
      */
     @GetMapping("/list")
-    @SysLog("分页查询博客信息")
+    @SysLog("分页查询博客信息(flag为0查询所有，flag为1查询回收站中的博客)")
     @ApiOperation("分页查询博客信息")
     public Object list(@RequestParam(value="page",defaultValue = "1")Integer currentPage,
                        @RequestParam(value="pageSize",defaultValue = "10")Integer pageSize,
-                       @RequestParam(value="searchStr")String searchStr){
+                       @RequestParam(value="searchStr")String searchStr,
+                       @RequestParam(value="flag",defaultValue = "0")Integer flag){
         Map<String,Object> map = new HashMap<>(16);
         map.put("title", StringUtil.formatLike(searchStr));
         map.put("start", currentPage-1);
         map.put("size", pageSize);
+        map.put("flag", flag);
 
         List<Blog> blogList = blogService.list(map);
         Long total = blogService.getTotal(map);
@@ -93,6 +94,7 @@ public class BlogAdminController {
         page.setPageSize(pageSize);
         page.setList(blogList);
         page.setStart(currentPage);
+        page.setTotal(total);
         return Result.success(page);
     }
 
@@ -127,4 +129,5 @@ public class BlogAdminController {
         Blog blog = blogService.findById(id);
         return Result.success(blog);
     }
+
 }
