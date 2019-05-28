@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getTotal" parameterType="Map" resultType="Long">
 		select count(*) from t_blog
 		<where>
-			<if test="flag != null and flag != ''">
+			<if test="flag != null">
 				flag = #{flag}
 			</if>
 			<if test="title != null and title != ''">
