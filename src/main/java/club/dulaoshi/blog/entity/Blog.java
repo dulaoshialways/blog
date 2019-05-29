@@ -88,4 +88,9 @@ public class Blog {
      */
     private Integer flag;
 
+    /**
+     * 博客状态标识
+     */
+    private Integer state;
+
 }

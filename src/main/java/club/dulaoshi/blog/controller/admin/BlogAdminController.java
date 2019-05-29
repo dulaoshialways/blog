@@ -69,17 +69,20 @@ public class BlogAdminController {
      * @return
      */
     @GetMapping("/list")
-    @SysLog("分页查询博客信息(0 - 已发表 1 - 已删除 2 - 草稿箱)")
+    @SysLog("分页查询博客信息")
     @ApiOperation("分页查询博客信息")
     public Object list(@RequestParam(value="page",defaultValue = "1")Integer currentPage,
                        @RequestParam(value="pageSize",defaultValue = "10")Integer pageSize,
                        @RequestParam(value="searchStr")String searchStr,
-                       @RequestParam(value="flag")Integer flag){
+                       @RequestParam(value="state")Integer state){
+        if (state == -1) {
+            state = null;
+        }
         Map<String,Object> map = new HashMap<>(16);
         map.put("title", StringUtil.formatLike(searchStr));
         map.put("start", currentPage-1);
         map.put("size", pageSize);
-        map.put("flag", flag);
+        map.put("state", state);
 
         List<Blog> blogList = blogService.list(map);
         Long total = blogService.getTotal(map);
