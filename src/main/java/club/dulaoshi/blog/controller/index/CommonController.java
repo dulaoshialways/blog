@@ -1,4 +1,4 @@
-package club.dulaoshi.blog.controller;
+package club.dulaoshi.blog.controller.index;
 
 import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.entity.*;
