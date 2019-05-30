@@ -38,3 +38,12 @@ logging:
 lucene:
   path : /addata/blog/lucene
 #  path : /lucene
+
+blog:
+  # 七牛云对象存储配置信息
+  qiniu:
+    #外链域名
+    endPoint: http://prfov28qh.bkt.clouddn.com
+    accessKey: sakldjskdjkl 
+    secretKey: sadklsamdl
+    bucketName: blog
