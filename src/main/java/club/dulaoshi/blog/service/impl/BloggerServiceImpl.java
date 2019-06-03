@@ -6,6 +6,7 @@ import club.dulaoshi.blog.service.BloggerService;
 import club.dulaoshi.blog.utils.RedisUtil;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.Map;
  * @des 博主service实现类
  */
 @Service("bloggerService")
+@Transactional(rollbackFor = Exception.class)
 public class BloggerServiceImpl  implements BloggerService {
     private final BloggerDao bloggerDao;
 

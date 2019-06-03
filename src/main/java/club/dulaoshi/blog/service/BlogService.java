@@ -42,8 +42,9 @@ public interface BlogService {
      * 更新博客信息
      * @param blog
      * @return
+     * @throws Exception
      */
-    Integer update(Blog blog);
+    Integer update(Blog blog) throws Exception;
 
     /**
      * 获取上一个博客
@@ -63,8 +64,9 @@ public interface BlogService {
      * 添加博客信息
      * @param blog
      * @return
+     * @throws Exception
      */
-    Integer add(Blog blog);
+    Integer add(Blog blog) throws Exception;
 
     /**
      * 删除博客信息

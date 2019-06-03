@@ -4,6 +4,7 @@ import club.dulaoshi.blog.dao.BlogTypeDao;
 import club.dulaoshi.blog.entity.BlogType;
 import club.dulaoshi.blog.service.BlogTypeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
  * @des 博客类型service实现类
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class BlogTypeServiceImpl implements BlogTypeService {
 
     private final BlogTypeDao blogTypeDao;

@@ -5,6 +5,7 @@ import club.dulaoshi.blog.entity.Comment;
 import club.dulaoshi.blog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
  * @des 评论service实现类
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentDao commentDao;

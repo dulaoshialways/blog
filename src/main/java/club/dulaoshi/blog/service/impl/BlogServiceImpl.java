@@ -2,8 +2,10 @@ package club.dulaoshi.blog.service.impl;
 
 import club.dulaoshi.blog.dao.BlogDao;
 import club.dulaoshi.blog.entity.Blog;
+import club.dulaoshi.blog.lucene.BlogIndex;
 import club.dulaoshi.blog.service.BlogService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -14,11 +16,14 @@ import java.util.Map;
  * @des 博客service实现类
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class BlogServiceImpl implements BlogService {
     private final BlogDao blogDao;
+    private final BlogIndex blogIndex;
 
-    public BlogServiceImpl(BlogDao blogDao) {
+    public BlogServiceImpl(BlogDao blogDao, BlogIndex blogIndex) {
         this.blogDao = blogDao;
+        this.blogIndex = blogIndex;
     }
 
     @Override
@@ -42,8 +47,10 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Integer update(Blog blog) {
-        return blogDao.update(blog);
+    public Integer update(Blog blog) throws Exception{
+        Integer flag = blogDao.update(blog);
+        blogIndex.updateIndex(blog);
+        return flag;
     }
 
     @Override
@@ -57,8 +64,10 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Integer add(Blog blog) {
-        return blogDao.add(blog);
+    public Integer add(Blog blog) throws Exception{
+        Integer flag = blogDao.add(blog);
+        blogIndex.addIndex(blog);
+        return flag;
     }
 
     @Override

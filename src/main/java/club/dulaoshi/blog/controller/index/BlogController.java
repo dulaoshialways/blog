@@ -49,7 +49,7 @@ public class BlogController {
     @GetMapping(value="/articles")
     @SysLog("获取博客详情")
     @ApiOperation("获取博客详情")
-    public Object details(@RequestParam("id") Integer id){
+    public Object details(@RequestParam("id") Integer id) throws Exception{
         Map<String,Object> result = new HashMap<>(16);
         Blog blog = blogService.findById(id);
         String keyWords = blog.getKeyWord();

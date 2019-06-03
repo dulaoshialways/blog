@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY
 			DATE_FORMAT(releaseDate, '%Y年%m月')DESC
 	</select>
-	
+
 	<select id="list" parameterType="Map" resultMap="BlogResult">
 		select
 			tb.id,
@@ -92,7 +92,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			tb.replyHit,
 			tb.content,
 			tbt.typeName,
-			tb.keyWord
+			tb.keyWord,
+			tb.typeId
 		from t_blog
 			tb left join t_blogtype tbt on tb.typeId = tbt.id
 		where tb.id=#{id}

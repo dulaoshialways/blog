@@ -5,6 +5,7 @@ import club.dulaoshi.blog.entity.Link;
 import club.dulaoshi.blog.service.LinkService;
 import club.dulaoshi.blog.utils.RedisUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
  * @des 友情链接service实现类
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class LinkServiceImpl implements LinkService {
 
     private final LinkDao linkDao;
