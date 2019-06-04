@@ -18,7 +18,7 @@ import java.util.UUID;
  * @des
  */
 @RestController
-@RequestMapping("/qiniu")
+@RequestMapping("/admin/qiniu")
 public class QiniuController {
 
     private final QiniuProp qiniuProp;

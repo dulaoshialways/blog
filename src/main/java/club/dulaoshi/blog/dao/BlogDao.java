@@ -70,7 +70,14 @@ public interface BlogDao {
      * @param id
      * @return
      */
-    Integer delete(Integer id);
+    Integer deleteById(Integer id);
+
+    /**
+     * 放入回收站
+     * @param state
+     * @return
+     */
+    Integer deleteByState(Integer state);
 
     /**
      * 查询指定博客类别下的博客数量

@@ -71,8 +71,13 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Integer delete(Integer id) {
-        return blogDao.delete(id);
+    public Integer deleteById(Integer id) {
+        return blogDao.deleteById(id);
+    }
+
+    @Override
+    public Integer deleteByState(Integer state) {
+        return blogDao.deleteByState(state);
     }
 
     @Override

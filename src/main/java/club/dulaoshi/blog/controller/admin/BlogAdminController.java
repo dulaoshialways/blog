@@ -1,6 +1,7 @@
 package club.dulaoshi.blog.controller.admin;
 
 import club.dulaoshi.blog.conf.annotation.SysLog;
+import club.dulaoshi.blog.dto.BlogDelete;
 import club.dulaoshi.blog.entity.Blog;
 import club.dulaoshi.blog.entity.Page;
 import club.dulaoshi.blog.lucene.BlogIndex;
@@ -53,7 +54,7 @@ public class BlogAdminController {
             resultTotal = blogService.update(blog);
         }
         if(resultTotal>0){
-            return Result.success();
+            return Result.success(blog);
         }else{
             return Result.fail(ResultCode.DB_ADD_FAIL.getCode());
         }
@@ -100,19 +101,27 @@ public class BlogAdminController {
     }
 
     /**
-     * 博客信息删除
-     * @param ids
+     * 博客信息删除（包含删除和放入回收站）
+     * @param blogDelete
      * @return
      * @throws Exception
      */
-    @GetMapping("/delete")
-    @SysLog("博客信息删除")
-    @ApiOperation("博客信息删除")
-    public Object delete(@RequestParam(value="ids",required =false)String ids)throws Exception{
-        String[] idsStr = ids.split(",");
-        for(int i= 0;i<idsStr.length;i++){
-            blogService.delete(Integer.parseInt(idsStr[i]));
-            blogIndex.deleteIndex(idsStr[i]);
+    @PostMapping("/delete")
+    @SysLog("博客信息删除（包含删除和放入回收站）")
+    @ApiOperation("博客信息删除（包含删除和放入回收站）")
+    public Object delete(@RequestBody BlogDelete blogDelete)throws Exception{
+        List<Integer> ids = blogDelete.getIds();
+        Integer status = blogDelete.getStatus();
+        if (status == 0) {
+            for (Integer id : ids) {
+                blogService.deleteById(id);
+                blogIndex.deleteIndex(String.valueOf(id));
+            }
+        }else {
+            for (Integer id : ids) {
+                blogService.deleteByState(id);
+                //TODO 这里需要逻辑删除lucene
+            }
         }
         return Result.success();
     }

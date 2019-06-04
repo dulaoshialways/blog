@@ -39,8 +39,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			tb.clickHit,
 			tb.replyHit,
 			tb.content,
+			tb.mdContent,
+			tb.htmlContent,
 			tbt.typeName,
-			tb.keyWord
+			tb.keyWord,
+            tb.state,
+            tb.flag,
+			tb.authorName
 		from t_blog tb left join t_blogtype tbt on tb.typeId = tbt.id
 		<where>
 			flag = 0
@@ -91,9 +96,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			tb.clickHit,
 			tb.replyHit,
 			tb.content,
+			tb.mdContent,
+			tb.htmlContent,
 			tbt.typeName,
 			tb.keyWord,
-			tb.typeId
+			tb.typeId,
+			tb.state,
+			tb.flag,
+			tb.authorName
 		from t_blog
 			tb left join t_blogtype tbt on tb.typeId = tbt.id
 		where tb.id=#{id}
@@ -107,6 +117,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="content != null and content !=''">
 				content = #{content},
+			</if>
+			<if test="mdContent != null and mdContent != ''">
+				mdContent = #{mdContent},
+			</if>
+			<if test="htmlContent != null and htmlContent != ''">
+				htmlContent = #{htmlContent},
 			</if>
 			<if test="typeId != null">
 				typeId = #{typeId},
@@ -123,6 +139,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="summary!=null and summary!=''">
 				summary=#{summary},
 			</if>
+			<if test="state != null">
+				state = #{state},
+			</if>
 		</set>
 		where id = #{id}
 	</update>
@@ -136,11 +155,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Blog">
-		insert into t_blog values(null,#{title},#{summary},now(),0,0,#{content},#{typeId},#{keyWord},0,#{state})
+		insert into t_blog values(null,#{title},#{summary},now(),0,0,#{content},#{mdContent},#{htmlContent} ,#{typeId},#{keyWord},0,#{state},#{authorName})
 	</insert>
 	
-	<update id="delete" parameterType="Integer">
+	<update id="deleteById" parameterType="Integer">
 		update t_blog tb set tb.flag = 1 where tb.id =#{id}
+	</update>
+
+	<update id="deleteByState" parameterType="Integer">
+		update t_blog tb set tb.state = 1 where tb.id =#{id}
 	</update>
 	
 	

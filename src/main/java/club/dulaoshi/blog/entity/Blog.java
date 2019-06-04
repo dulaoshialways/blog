@@ -93,4 +93,19 @@ public class Blog {
      */
     private Integer state;
 
+    /**
+     * md编辑器文本内容
+     */
+    private String mdContent;
+
+    /**
+     * md编辑器html内容
+     */
+    private String htmlContent;
+
+    /**
+     * 博文作者
+     */
+    private String authorName;
+
 }
