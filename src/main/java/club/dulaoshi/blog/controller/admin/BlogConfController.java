@@ -2,7 +2,6 @@ package club.dulaoshi.blog.controller.admin;
 
 import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.entity.BlogConf;
-import club.dulaoshi.blog.entity.BlogType;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.result.ResultCode;
 import club.dulaoshi.blog.service.BlogConfService;

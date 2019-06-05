@@ -1,8 +1,11 @@
 package club.dulaoshi.blog.controller.qiniu;
 
+import club.dulaoshi.blog.conf.annotation.SysLog;
 import club.dulaoshi.blog.conf.prop.QiniuProp;
 import club.dulaoshi.blog.result.Result;
 import com.qiniu.util.Auth;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,15 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author djg
  * @date 2019/5/30 15:13
- * @des
+ * @des 七牛云controller
  */
 @RestController
 @RequestMapping("/admin/qiniu")
+@Api("七牛云controller")
 public class QiniuController {
 
     private final QiniuProp qiniuProp;
@@ -27,7 +30,15 @@ public class QiniuController {
         this.qiniuProp = qiniuProp;
     }
 
+
+    /**
+     * 获取七牛云token
+     * @param suffix
+     * @return
+     */
     @GetMapping("/qiniuUpToken")
+    @SysLog("获取七牛云token")
+    @ApiOperation("获取七牛云token")
     public Object qiniuUpToken(@RequestParam("suffix") String suffix){
         Map<String, Object> result = new HashMap<>(16);
         try {

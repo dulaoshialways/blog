@@ -2,7 +2,6 @@ package club.dulaoshi.blog.service.impl;
 
 import club.dulaoshi.blog.dao.BlogConfDao;
 import club.dulaoshi.blog.entity.BlogConf;
-import club.dulaoshi.blog.entity.BlogType;
 import club.dulaoshi.blog.service.BlogConfService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

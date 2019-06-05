@@ -1,7 +1,6 @@
 package club.dulaoshi.blog.dao;
 
 import club.dulaoshi.blog.entity.BlogConf;
-import club.dulaoshi.blog.entity.BlogType;
 
 /**
  * @author djg
