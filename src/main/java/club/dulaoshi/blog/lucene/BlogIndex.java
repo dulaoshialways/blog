@@ -45,7 +45,6 @@ public class BlogIndex {
      * @throws Exception
      */
     private IndexWriter getWriter()throws Exception{
-//		dir = FSDirectory.open(Paths.get("H://lucene"));
         dir = FSDirectory.open(Paths.get(lucenePath.getPath()));
         SmartChineseAnalyzer analyzer = new SmartChineseAnalyzer();
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
