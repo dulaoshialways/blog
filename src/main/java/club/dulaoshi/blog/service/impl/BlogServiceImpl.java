@@ -47,10 +47,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Integer update(Blog blog) throws Exception{
-        Integer flag = blogDao.update(blog);
-        blogIndex.updateIndex(blog);
-        return flag;
+    public Integer update(Blog blog){
+        return blogDao.update(blog);
     }
 
     @Override
@@ -64,10 +62,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Integer add(Blog blog) throws Exception{
-        Integer flag = blogDao.add(blog);
-        blogIndex.addIndex(blog);
-        return flag;
+    public Integer add(Blog blog){
+        return blogDao.add(blog);
     }
 
     @Override

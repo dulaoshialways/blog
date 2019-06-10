@@ -5,9 +5,11 @@ import club.dulaoshi.blog.entity.Blog;
 import club.dulaoshi.blog.entity.Comment;
 import club.dulaoshi.blog.result.Result;
 import club.dulaoshi.blog.result.ResultCode;
+import club.dulaoshi.blog.service.BlogConfService;
 import club.dulaoshi.blog.service.BlogService;
 import club.dulaoshi.blog.service.CommentService;
 import club.dulaoshi.blog.utils.AddressUtils;
+import club.dulaoshi.blog.utils.EmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,10 +30,14 @@ import javax.servlet.http.HttpServletRequest;
 public class CommentController {
     private final CommentService commentService;
     private final BlogService blogService;
+    private final BlogConfService blogConfService;
+    private final EmailService emailService;
 
-    public CommentController(CommentService commentService, BlogService blogService) {
+    public CommentController(CommentService commentService, BlogService blogService, BlogConfService blogConfService, EmailService emailService) {
         this.commentService = commentService;
         this.blogService = blogService;
+        this.blogConfService = blogConfService;
+        this.emailService = emailService;
     }
 
     /**
@@ -50,15 +56,18 @@ public class CommentController {
         String userIp = request.getRemoteAddr();
         userIp = AddressUtils.getAddresses("ip=" + userIp);
         comment.setUserIp(userIp);
+        Blog blog = new Blog();
         if (comment.getId() == null) {
             resultTotal = commentService.add(comment);
             // 博客回复次数加一
-            Blog blog = blogService.findById(comment.getBlogId());
+            blog = blogService.findById(comment.getBlogId());
             blog.setReplyHit(blog.getReplyHit() + 1);
             blogService.update(blog);
         }
 
         if(resultTotal >0){
+            String email = blogConfService.findByName("email").getValue();
+            emailService.sendMail(email,userIp+"评论了："+blog.getTitle()+"博客 评论内容："+comment.getContent());
             return Result.success("回复成功，等待管理员审核！");
         }
         return Result.fail(ResultCode.DB_ADD_FAIL.getCode());
